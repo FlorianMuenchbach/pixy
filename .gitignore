@@ -9,3 +9,11 @@
 *.jtag
 *.swp
 *.swo
+
+bin/
+moc_*.cpp
+src/host/pixymon/Makefile
+src/host/pixymon/PixyMon
+qrc_resources.cpp
+ui_*.h
+
