@@ -23,6 +23,7 @@
 #include "disconnectevent.h"
 #include "videowidget.h"
 #include "console.h"
+#include "infowidget.h"
 #include "mainwindow.h"
 #include "renderer.h"
 #include "sleeper.h"
@@ -30,9 +31,13 @@
 
 QString printType(uint32_t val, bool parens=false);
 
-Interpreter::Interpreter(ConsoleWidget *console, VideoWidget *video, ParameterDB *data) : m_mutexProg(QMutex::Recursive)
+Interpreter::Interpreter(ConsoleWidget *console,
+        VideoWidget *video,
+        InfoWidget *infowidget,
+        ParameterDB *data) : m_mutexProg(QMutex::Recursive)
 {
     m_console = console;
+    m_infowidget = infowidget;
     m_video = video;
     m_pixymonParameters = data;
     m_pc = 0;
@@ -46,7 +51,7 @@ Interpreter::Interpreter(ConsoleWidget *console, VideoWidget *video, ParameterDB
     m_running = -1; // set to bogus value to force update
     m_chirp = NULL;
 
-    m_renderer = new Renderer(m_video, this);
+    m_renderer = new Renderer(m_video, m_infowidget, this);
 
     connect(m_console, SIGNAL(textLine(QString)), this, SLOT(command(QString)));
     connect(m_console, SIGNAL(controlKey(Qt::Key)), this, SLOT(controlKey(Qt::Key)));
@@ -327,6 +332,7 @@ void Interpreter::handleData(void *args[])
         {
             m_print += printType(*(uint32_t *)args[0]) + " frame data\n";
             m_renderer->render(*(uint32_t *)args[0], args+1);
+            m_infowidget->gotFrameData();
         }
         else if (type==CRP_HSTRING)
         {

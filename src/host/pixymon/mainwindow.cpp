@@ -28,6 +28,7 @@
 #include "pixymon.h"
 #include "videowidget.h"
 #include "console.h"
+#include "infowidget.h"
 #include "interpreter.h"
 #include "chirpmon.h"
 #include "dfu.h"
@@ -68,9 +69,11 @@ MainWindow::MainWindow(int argc, char *argv[], QWidget *parent) :
 
     m_settings = new QSettings(QSettings::NativeFormat, QSettings::UserScope, PIXYMON_COMPANY, PIXYMON_TITLE);
     m_console = new ConsoleWidget(this);
+    m_infowidget = new InfoWidget(this);
     m_video = new VideoWidget(this);
 
     m_ui->imageLayout->addWidget(m_video);
+    m_ui->imageLayout->addWidget(m_infowidget);
     m_ui->imageLayout->addWidget(m_console);
 
     m_ui->toolBar->addAction(m_ui->actionPlay_Pause);
@@ -86,6 +89,9 @@ MainWindow::MainWindow(int argc, char *argv[], QWidget *parent) :
 
     m_ui->actionConfigure->setIcon(QIcon(":/icons/icons/config.png"));
     m_ui->toolBar->addAction(m_ui->actionConfigure);
+
+    m_ui->actionToggleInfo->setIcon(QIcon(":/icons/icons/help-about.png"));
+    m_ui->toolBar->addAction(m_ui->actionToggleInfo);
 
     updateButtons();
 
@@ -154,6 +160,7 @@ void MainWindow::updateButtons()
         m_ui->actionRaw_video->setEnabled(false);
         m_ui->actionCooked_video->setEnabled(false);
         m_ui->actionConfigure->setEnabled(false);
+        m_ui->actionToggleInfo->setEnabled(false);
         m_ui->actionLoad_Pixy_parameters->setEnabled(false);
         m_ui->actionSave_Pixy_parameters->setEnabled(false);
         m_ui->actionSave_Image->setEnabled(false);
@@ -166,6 +173,7 @@ void MainWindow::updateButtons()
         m_ui->actionRaw_video->setEnabled(false);
         m_ui->actionCooked_video->setEnabled(false);
         m_ui->actionConfigure->setEnabled(true);
+        m_ui->actionToggleInfo->setEnabled(true);
         m_ui->actionLoad_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Image->setEnabled(true);
@@ -178,6 +186,7 @@ void MainWindow::updateButtons()
         m_ui->actionRaw_video->setEnabled(true);
         m_ui->actionCooked_video->setEnabled(true);
         m_ui->actionConfigure->setEnabled(true);
+        m_ui->actionToggleInfo->setEnabled(true);
         m_ui->actionLoad_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Image->setEnabled(true);
@@ -190,6 +199,7 @@ void MainWindow::updateButtons()
         m_ui->actionRaw_video->setEnabled(true);
         m_ui->actionCooked_video->setEnabled(true);
         m_ui->actionConfigure->setEnabled(true);
+        m_ui->actionToggleInfo->setEnabled(true);
         m_ui->actionLoad_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Pixy_parameters->setEnabled(true);
         m_ui->actionSave_Image->setEnabled(true);
@@ -202,6 +212,7 @@ void MainWindow::updateButtons()
         m_ui->actionRaw_video->setEnabled(false);
         m_ui->actionCooked_video->setEnabled(false);
         m_ui->actionConfigure->setEnabled(false);
+        m_ui->actionToggleInfo->setEnabled(false);
         m_ui->actionLoad_Pixy_parameters->setEnabled(false);
         m_ui->actionSave_Pixy_parameters->setEnabled(false);
         m_ui->actionSave_Image->setEnabled(false);
@@ -312,7 +323,7 @@ void MainWindow::connectPixy(bool state)
             else
             {
                 m_console->print("Pixy detected.\n");
-                m_interpreter = new Interpreter(m_console, m_video, &m_parameters);
+                m_interpreter = new Interpreter(m_console, m_video, m_infowidget, &m_parameters);
 
                 m_initScriptExecuted = false; // reset so we'll execute for this instance
                 connect(m_interpreter, SIGNAL(runState(uint)), this, SLOT(handleRunState(uint)));
@@ -527,6 +538,10 @@ void MainWindow::on_actionConfigure_triggered()
         m_configDialog->setAttribute(Qt::WA_DeleteOnClose);
         updateButtons();
     }
+}
+
+void MainWindow::on_actionToggleInfo_triggered() {
+    m_infowidget->setVisible(!m_infowidget->isVisible());
 }
 
 void MainWindow::on_actionRaw_video_triggered()

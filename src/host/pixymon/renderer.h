@@ -22,6 +22,7 @@
 
 class Interpreter;
 
+class InfoWidget;
 class VideoWidget;
 
 class Renderer : public QObject
@@ -29,7 +30,7 @@ class Renderer : public QObject
     Q_OBJECT
 
 public:
-    Renderer(VideoWidget *video, Interpreter *interpreter);
+    Renderer(VideoWidget *video, InfoWidget *infowidget, Interpreter *interpreter);
     ~Renderer();
 
     int render(uint32_t type, void *args[]);
@@ -74,6 +75,7 @@ private:
     void pixelsOut(int x0, int y0, int width, int height);
 
     VideoWidget *m_video;
+    InfoWidget *m_infowidget;
     Interpreter *m_interpreter;
 
     bool m_backgroundFrame; // our own copy because we're in a different thread (not gui thread)

@@ -53,7 +53,7 @@ class Interpreter : public QThread
     Q_OBJECT
 
 public:
-    Interpreter(ConsoleWidget *console, VideoWidget *video, ParameterDB *data);
+    Interpreter(ConsoleWidget *console, VideoWidget *video, InfoWidget *infowidget, ParameterDB *data);
     ~Interpreter();
 
     // local program business
@@ -141,6 +141,7 @@ private:
     void augmentProcInfo(ProcInfo *info);
 
     ConsoleWidget *m_console;
+    InfoWidget *m_infowidget;
     VideoWidget *m_video;
     Renderer *m_renderer;
 

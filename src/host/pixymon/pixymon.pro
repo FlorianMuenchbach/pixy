@@ -15,6 +15,7 @@ SOURCES += main.cpp\
     videowidget.cpp \
     usblink.cpp \
     console.cpp \
+    infowidget.cpp \
     interpreter.cpp \
     renderer.cpp \
     chirpmon.cpp \
@@ -38,6 +39,7 @@ HEADERS  += mainwindow.h \
     videowidget.h \
     usblink.h \
     console.h \
+    infowidget.h \
     interpreter.h \
     renderer.h \
     chirpmon.h \

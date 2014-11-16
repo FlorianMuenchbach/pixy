@@ -31,6 +31,7 @@ namespace Ui {
 class ChirpMon;
 class VideoWidget;
 class ConsoleWidget;
+class InfoWidget;
 class Interpreter;
 class Flash;
 class ConnectEvent;
@@ -62,6 +63,7 @@ private slots:
     void on_actionPlay_Pause_triggered();
     void on_actionDefault_program_triggered();
     void on_actionConfigure_triggered();
+    void on_actionToggleInfo_triggered();
     void on_actionHelp_triggered();
     void on_actionSave_Image_triggered();
     void on_actionSave_Pixy_parameters_triggered();
@@ -92,6 +94,7 @@ private:
     enum {WAIT_NONE, WAIT_EXITTING, WAIT_SAVING_PARAMS, WAIT_LOADING_PARAMS} m_waiting;
     VideoWidget *m_video;
     ConsoleWidget *m_console;
+    InfoWidget *m_infowidget;
     Interpreter *m_interpreter;
     ConnectEvent *m_connect;
     Flash *m_flash;

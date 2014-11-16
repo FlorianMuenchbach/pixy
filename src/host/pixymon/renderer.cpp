@@ -18,14 +18,16 @@
 #include <QDebug>
 #include <QFile>
 #include "renderer.h"
+#include "infowidget.h"
 #include "videowidget.h"
 #include <chirp.hpp>
 #include "calc.h"
 #include <math.h>
 
-Renderer::Renderer(VideoWidget *video, Interpreter *interpreter) : m_blobs(interpreter), m_background(0, 0)
+Renderer::Renderer(VideoWidget *video, InfoWidget *infowidget, Interpreter *interpreter) : m_blobs(interpreter), m_background(0, 0)
 {
     m_video = video;
+    m_infowidget = infowidget;
     m_interpreter = interpreter;
 
     m_rawFrame.m_pixels = new uint8_t[0x10000];
@@ -36,6 +38,8 @@ Renderer::Renderer(VideoWidget *video, Interpreter *interpreter) : m_blobs(inter
 
     connect(this, SIGNAL(image(QImage)), m_video, SLOT(handleImage(QImage))); // Qt::BlockingQueuedConnection);
     connect(this, SIGNAL(flushImage()), m_video, SLOT(handleFlush())); //, Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(image(QImage)), m_infowidget, SLOT(handleImage(QImage))); // Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(flushImage()), m_infowidget, SLOT(handleFlush())); //, Qt::BlockingQueuedConnection);
 }
 
 
